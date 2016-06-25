@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey_50"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/m_16"
+    android:paddingTop="@dimen/m_16">
+
+    <RelativeLayout
+        android:id="@+id/news_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.example.dmitry.testapplication.ui.views.TextViewMedium
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/m_16"
+            android:layout_marginRight="@dimen/m_16"
+            android:layout_toRightOf="@+id/tvIcon"
+            android:lineSpacingMultiplier="1.5"
+            android:text="00.00.0000"
+            android:textColor="@color/grey_800"
+            android:textSize="@dimen/text_10" />
+
+        <com.example.dmitry.testapplication.ui.views.TextViewMedium
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/m_16"
+            android:layout_marginRight="@dimen/m_16"
+            android:layout_toRightOf="@+id/tvIcon"
+            android:lineSpacingMultiplier="1.1"
+            android:text="Title"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_14"
+            android:layout_below="@+id/tvDate" />
+
+        <com.example.dmitry.testapplication.ui.views.TextViewEuro
+            android:id="@+id/tvIcon"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:background="@drawable/news_icon_bg"
+            android:gravity="center"
+            android:text="T"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/m_26" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/news_item_container"
+        android:layout_marginLeft="@dimen/m_72"
+        android:layout_marginTop="@dimen/m_16"
+        android:background="@color/grey_1" />
+
+</RelativeLayout>
