@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity implements NewsListAdapter.L
     BottomSheetBehavior behavior;
     String newsIdLoadTask;
     Toolbar toolbar;
-
-    public NestedScrollView nestedScrollView;
+    boolean doExit;
+    NestedScrollView nestedScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +86,6 @@ public class MainActivity extends AppCompatActivity implements NewsListAdapter.L
         openContent();
     }
 
-    boolean doExit;
-
     @Override
     public void onBackPressed() {
         switch (behavior.getState()) {
@@ -112,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements NewsListAdapter.L
     }
 
     private void openContent() {
-        nestedScrollView.scrollTo(0, 0);
         toolbar.clearAnimation();
         toolbar.animate().translationY(0).setDuration(DURATION).start();
     }

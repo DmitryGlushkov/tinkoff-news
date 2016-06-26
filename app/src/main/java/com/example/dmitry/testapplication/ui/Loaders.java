@@ -7,6 +7,7 @@ import com.example.dmitry.testapplication.api.HttpService;
 import com.example.dmitry.testapplication.api.contract.ResponseNewsContent;
 import com.example.dmitry.testapplication.api.contract.ResponseNewsTitles;
 import com.example.dmitry.testapplication.app.ApplicationBase;
+import com.example.dmitry.testapplication.managers.DataManager;
 import com.example.dmitry.testapplication.models.ModelNewsContent;
 import com.example.dmitry.testapplication.models.ModelNewsTitle;
 
@@ -18,35 +19,45 @@ import javax.inject.Inject;
 
 public class Loaders {
 
+    private static final String TAG = "LoaderNewsTitles";
+
     public static final int
             ID_NEWS_TITLES = 1,
             ID_NEWS_CONTENT = 2;
 
     public static final String ID = "id";
 
-    public static class LoaderNewsList extends AsyncTaskLoader<ArrayList<ModelNewsTitle>> {
+    public static class LoaderNewsTitles extends AsyncTaskLoader<ArrayList<ModelNewsTitle>> {
+
         @Inject
         HttpService http;
 
-        public LoaderNewsList(Context context) {
+        @Inject
+        DataManager dataManager;
+
+        public LoaderNewsTitles(Context context) {
             super(context);
             ApplicationBase.injector.inject(this);
         }
 
         @Override
         public ArrayList<ModelNewsTitle> loadInBackground() {
-            ArrayList<ModelNewsTitle> result = new ArrayList<>();
-            try {
-                ResponseNewsTitles responseNewsTitles = http.newsTitles().execute().body();
-                if (responseNewsTitles.isSuccessful()) {
-                    result.addAll(Arrays.asList(responseNewsTitles.newsArray));
-                } else {
-                    // // TODO: 25.06.2016 broadcasr error
+            if (dataManager.offlineMode()) {
+                dataManager.readNewsTitleListFromDb();
+            } else {
+                try {
+                    ResponseNewsTitles responseNewsTitles = http.newsTitles().execute().body();
+                    if (responseNewsTitles.isSuccessful()) {
+                        dataManager.setNewsTitleList(Arrays.asList(responseNewsTitles.newsArray));
+                    } else {
+                        dataManager.readNewsTitleListFromDb();
+                    }
+                } catch (IOException e) {
+                    dataManager.readNewsTitleListFromDb();
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            return result;
+            return dataManager.getNewsTitleList();
         }
     }
 
@@ -54,6 +65,10 @@ public class Loaders {
 
         @Inject
         HttpService http;
+
+        @Inject
+        DataManager dataManager;
+
         String id;
 
         public LoaderNewsContent(Context context, String id) {
@@ -64,17 +79,22 @@ public class Loaders {
 
         @Override
         public ModelNewsContent loadInBackground() {
-            try {
-                ResponseNewsContent responseNewsContent = http.newsContent(id).execute().body();
-                if (responseNewsContent.isSuccessful()) {
-                    return responseNewsContent.content;
-                } else {
-                    // // TODO: 25.06.2016 broadcasr error
+            if (dataManager.offlineMode()) {
+                dataManager.readNewsContentListFromDb(id);
+            } else {
+                try {
+                    ResponseNewsContent responseNewsContent = http.newsContent(id).execute().body();
+                    if (responseNewsContent.isSuccessful()) {
+                        dataManager.setNewsContent(responseNewsContent.content);
+                    } else {
+                        dataManager.readNewsContentListFromDb(id);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    dataManager.readNewsContentListFromDb(id);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            return ModelNewsContent.stub();
+            return dataManager.getNewsContent();
         }
     }
 

@@ -12,7 +12,6 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField("String", "server", "\"https://api.tinkoff.ru/v1/\"")
-        buildConfigField("String", "webUrl", "\"https://www.tinkoff.ru\"")
     }
     buildTypes {
         release {
@@ -34,6 +33,5 @@ dependencies {
     // di
     compile 'com.google.dagger:dagger:2.5'
     apt 'com.google.dagger:dagger-compiler:2.5'
-    /// https://github.com/georgeci/DaggerTest/blob/master/app/build.gradle
     compile 'org.glassfish:javax.annotation:10.0-b28'
 }

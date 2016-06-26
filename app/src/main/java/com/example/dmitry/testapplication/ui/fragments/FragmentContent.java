@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.dmitry.testapplication.R;
@@ -20,12 +21,11 @@ import com.example.dmitry.testapplication.ui.Loaders;
 import com.example.dmitry.testapplication.ui.views.CustomWebView;
 import com.example.dmitry.testapplication.utils.Utils;
 
-import okhttp3.internal.Util;
-
 public class FragmentContent extends FragmentBase implements LoaderManager.LoaderCallbacks<ModelNewsContent> {
 
     TextView tvTitle, tvDate;
     CustomWebView webContent;
+    ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -36,6 +36,7 @@ public class FragmentContent extends FragmentBase implements LoaderManager.Loade
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         webContent = (CustomWebView) view.findViewById(R.id.webContent);
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvDate = (TextView) view.findViewById(R.id.tvDate);
@@ -68,7 +69,6 @@ public class FragmentContent extends FragmentBase implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<ModelNewsContent> loader, ModelNewsContent data) {
-        dataManager.setNewsContent(data);
         setupContent();
     }
 
@@ -78,6 +78,7 @@ public class FragmentContent extends FragmentBase implements LoaderManager.Loade
     }
 
     public void loadContent(String id) {
+        progressBar.setVisibility(View.VISIBLE);
         Bundle args = new Bundle();
         args.putString(Loaders.ID, id);
         getActivity().getSupportLoaderManager().restartLoader(Loaders.ID_NEWS_CONTENT, args, this).forceLoad();
@@ -99,6 +100,8 @@ public class FragmentContent extends FragmentBase implements LoaderManager.Loade
     }
 
     private void hideIn() {
+
+        progressBar.setVisibility(View.GONE);
 
         tvTitle.setAlpha(0f);
         webContent.setAlpha(0f);

@@ -44,31 +44,37 @@ public class FragmentNewsList extends FragmentBase implements LoaderManager.Load
         newsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         newsList.setAdapter(newsListAdapter);
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        swipeRefresh.setColorSchemeColors(getResources().getColor(R.color.yellow));
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getActivity().getSupportLoaderManager().restartLoader(ID_NEWS_TITLES, null, FragmentNewsList.this).forceLoad();
             }
         });
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getActivity().getSupportLoaderManager().getLoader(ID_NEWS_TITLES) == null)
-            getActivity().getSupportLoaderManager().initLoader(ID_NEWS_TITLES, null, this).forceLoad();
+        swipeRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                startRefreshing();
+                if (getActivity() != null && getActivity().getSupportLoaderManager().getLoader(ID_NEWS_TITLES) == null)
+                    getActivity().getSupportLoaderManager().initLoader(ID_NEWS_TITLES, null, FragmentNewsList.this).forceLoad();
+            }
+        });
     }
 
     @Override
     public Loader<ArrayList<ModelNewsTitle>> onCreateLoader(int id, Bundle args) {
-        return new Loaders.LoaderNewsList(getActivity());
+        return new Loaders.LoaderNewsTitles(getActivity());
     }
 
     @Override
     public void onLoadFinished(Loader<ArrayList<ModelNewsTitle>> loader, ArrayList<ModelNewsTitle> data) {
-        System.out.println("onLoadFinished " + data.size());
         stopRefreshing();
-        dataManager.setNewsTitleList(data);
         newsListAdapter.notifyDataSetChanged();
     }
 
@@ -78,7 +84,17 @@ public class FragmentNewsList extends FragmentBase implements LoaderManager.Load
     }
 
     private void stopRefreshing() {
-        if (swipeRefresh.isRefreshing()) swipeRefresh.setRefreshing(false);
+        if (swipeRefresh != null && swipeRefresh.isRefreshing()) swipeRefresh.setRefreshing(false);
+    }
+
+    private void startRefreshing() {
+        swipeRefresh.setRefreshing(true);
+        swipeRefresh.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                stopRefreshing();
+            }
+        }, 3500);
     }
 
 }

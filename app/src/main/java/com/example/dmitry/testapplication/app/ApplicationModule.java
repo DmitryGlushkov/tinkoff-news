@@ -2,6 +2,8 @@ package com.example.dmitry.testapplication.app;
 
 import com.example.dmitry.testapplication.BuildConfig;
 import com.example.dmitry.testapplication.api.HttpService;
+import com.example.dmitry.testapplication.db.DbInterface;
+import com.example.dmitry.testapplication.managers.DataBaseManager;
 import com.example.dmitry.testapplication.managers.DataManager;
 import com.example.dmitry.testapplication.models.ModelNewsTitle;
 import com.example.dmitry.testapplication.utils.FontHelper;
@@ -51,7 +53,7 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public DataManager provideDataManager() {
-        return new DataManager();
+        return new DataManager(applicationBase);
     }
 
 }

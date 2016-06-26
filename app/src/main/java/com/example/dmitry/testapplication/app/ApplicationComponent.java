@@ -19,7 +19,7 @@ public interface ApplicationComponent {
 
     void inject(TextViewEuro textViewEuro);
 
-    void inject(Loaders.LoaderNewsList loaderNewsList);
+    void inject(Loaders.LoaderNewsTitles loaderNewsTitles);
 
     void inject(Loaders.LoaderNewsContent loaderNewsContent);
 }

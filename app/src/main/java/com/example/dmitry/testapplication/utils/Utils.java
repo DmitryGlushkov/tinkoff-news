@@ -1,6 +1,8 @@
 package com.example.dmitry.testapplication.utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,9 +29,18 @@ public class Utils {
         return bulder.toString();
     }
 
-    public static String getDateString(long milliseconds){
+    public static String getDateString(long milliseconds) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milliseconds);
         return sdf.format(calendar.getTime());
+    }
+
+    public static boolean isOnline(Context context) {
+        NetworkInfo netInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
