@@ -19,8 +19,6 @@ import javax.inject.Inject;
 
 public class Loaders {
 
-    private static final String TAG = "LoaderNewsTitles";
-
     public static final int
             ID_NEWS_TITLES = 1,
             ID_NEWS_CONTENT = 2;

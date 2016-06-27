@@ -16,7 +16,7 @@ public abstract class FragmentBase extends Fragment {
     protected HttpService http;
 
     @Inject
-    DataManager dataManager;
+    protected DataManager dataManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

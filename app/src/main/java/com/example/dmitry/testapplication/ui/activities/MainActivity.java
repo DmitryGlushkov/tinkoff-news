@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements NewsListAdapter.L
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         nestedScrollView = (NestedScrollView) findViewById(R.id.bottom_sheet);
-        nestedScrollView.setClipToPadding(false);
         behavior = BottomSheetBehavior.from(nestedScrollView);
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
